@@ -1,0 +1,181 @@
+import java.util.Scanner;
+import java.util.Random;
+public class Main {
+static int fieldLength;
+static int VictorCond;
+static char player1 = '✕';
+static char player2 = '⃝';
+static char fieldPlace = '☐';
+static char [][] field;
+static Random random = new Random();
+    public static void main(String[] args) {
+        Scanner length = new Scanner(System.in);
+        System.out.println("Please Set The Length Of The Field");
+        fieldLength = length.nextInt();
+
+        Scanner VictoryCondition = new Scanner(System.in);
+        System.out.println("Please Set The Condition Of The Victory");
+        VictorCond = VictoryCondition.nextInt();
+
+	initField();
+	DrawField();
+	while (true){
+	    yourTurn();
+	    //DrawField();
+	    if(checkVictory(player1)){
+	        System.out.println("you won");
+	        break;
+        }
+	    if (Draw()){
+	        System.out.println("DRAW");
+	        break;
+        }
+	    ComputerTurn();
+	    DrawField();
+	    if (checkVictory(player2)){
+	        System.out.println("Computer Won");
+	        break;
+        }
+	    if (Draw()){
+	        System.out.println("DRAW");
+	        break;
+        }
+
+    }
+    }
+    public static void initField(){
+    	field = new char[fieldLength][fieldLength];
+    	for (int i=0; i<fieldLength; i++){
+    		for (int u=0; u<fieldLength; u++){
+    			field[i][u] = fieldPlace;
+			}
+		}
+	}
+	public static void DrawField(){
+    	for (int i=0; i<fieldLength; i++){
+    		for (int u=0; u<fieldLength; u++){
+    			System.out.print(field[i][u] + " ");
+			}
+    		System.out.println();
+		}
+	}
+	public static void yourTurn(){
+    	Scanner coordinateX = new Scanner(System.in);
+		Scanner coordinateY = new Scanner(System.in);
+    	System.out.println("Write The X coordinate");
+		int x= coordinateX.nextInt();
+		System.out.println("Write The Y coordinate");
+		int y=coordinateY.nextInt();
+		if (field[x][y]==player2) {
+			System.out.println("choose free place");
+		}
+    	else if (isCellValid(y, x)){
+    	field[y][x] = player1;}
+    	else System.out.println("choose the place which exist");
+    	DrawField();
+    	System.out.println("____________");
+    }
+    public static void ComputerTurn(){
+    	int x=-1;
+    	int y=-1;
+    	for (int i=0; i<fieldLength; i++){
+    		for (int u=0; u<fieldLength; u++){
+    			if (isCellValid(i, u)){
+    				field [i][u] = player1;
+    				if (checkVictory(player1)){
+    					x=u;
+    					y=i;
+					}
+    				field [i][u] = fieldPlace;
+				}
+			}
+		}
+    	if (x==-1 && y==-1){
+
+    			while (!isCellValid(y, x)){
+    				x = random.nextInt(fieldLength);
+    				y = random.nextInt(fieldLength);
+			}
+    		field[y][x]= player2;
+		}
+	}
+	public static boolean isCellValid (int y, int x){
+    	if (x<0 || y<0 || x>fieldLength || y>fieldLength){
+    		return false;
+		}
+    	return field[y][x]==fieldPlace;
+	}
+	public static boolean Draw(){
+    	int draw =0;
+    	for (int i=0; i<fieldLength; i++){
+    		for (int u=0; u<fieldLength; u++){
+    			if (field[i][u] ==fieldPlace){
+    				draw++;
+				}
+			}
+		}
+    	return draw == 0;
+	}
+	public static boolean checkVictory(char symbol){
+    	for(int i=0; i<fieldLength; i++){
+    		for (int u=0; u<fieldLength; u++){
+    			if (checkVictoryGorizontal(i, u, symbol) || checkVictoryVertical(i, u, symbol) ||
+				checkVictoryDiagonal(i, u, symbol) || checkVictoryDiagonal2(i, u, symbol)){
+    				return true;
+				}
+			}
+		}
+    	return false;
+	}
+	public static boolean checkVictoryGorizontal(int x, int y, char symbol){
+    	if (x<0 || y<0 || x + VictorCond > fieldLength ){
+    		return false;
+		}
+    	int c =0;
+    	for (int i=0; i< VictorCond; i++){
+    		if (field[i+x][y]==symbol){
+    			c++;
+			}
+		}
+    	return c == VictorCond;
+	}
+
+	public static boolean checkVictoryVertical(int x, int y, char symbol){
+		if (x<0 || y<0 || y + VictorCond > fieldLength ){
+			return false;
+		}
+		int c =0;
+		for (int i=0; i< VictorCond; i++){
+			if (field[x][y+i]==symbol){
+				c++;
+			}
+		}
+		return c == VictorCond;
+	}
+
+	public static boolean checkVictoryDiagonal(int x, int y, char symbol){
+		if (x<0 || y<0 || x + VictorCond > fieldLength || y+VictorCond >fieldLength){
+			return false;
+		}
+		int c =0;
+		for (int i=0; i< VictorCond; i++){
+			if (field[i+x][i+y]==symbol){
+				c++;
+			}
+		}
+		return c == VictorCond;
+	}
+
+	public static boolean checkVictoryDiagonal2(int x, int y, char symbol) {
+		if (x < 0 || y + 1 - VictorCond < 0 || x + VictorCond > fieldLength) {
+			return false;
+		}
+		int c = 0;
+		for (int i = 0; i < VictorCond; i++) {
+			if (field[i + x][y - i] == symbol) {
+				c++;
+			}
+		}
+		return c == VictorCond;
+	}
+	}
