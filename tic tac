@@ -1,3 +1,4 @@
+package com.company;
 import java.util.Scanner;
 import java.util.Random;
 public class Main {
@@ -88,9 +89,13 @@ static Random random = new Random();
 					}
     				field [i][u] = fieldPlace;
 				}
+    			if (checkVictory(player2)){
+    				field [i][u] = player2; break;
+				}
 			}
 		}
-    	if (x==-1 && y==-1){
+
+    	//if (x==-1 && y==-1){
 
     			while (!isCellValid(y, x)){
     				x = random.nextInt(fieldLength);
@@ -98,13 +103,14 @@ static Random random = new Random();
 			}
     		field[y][x]= player2;
 		}
-	}
+	//}
 	public static boolean isCellValid (int y, int x){
     	if (x<0 || y<0 || x>fieldLength || y>fieldLength){
     		return false;
 		}
     	return field[y][x]==fieldPlace;
 	}
+
 	public static boolean Draw(){
     	int draw =0;
     	for (int i=0; i<fieldLength; i++){
