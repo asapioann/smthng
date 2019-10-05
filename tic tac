@@ -1,4 +1,3 @@
-package com.company;
 import java.util.Scanner;
 import java.util.Random;
 public class Main {
@@ -67,12 +66,12 @@ static Random random = new Random();
 		int x= coordinateX.nextInt();
 		System.out.println("Write The Y coordinate");
 		int y=coordinateY.nextInt();
-		if (field[x][y]==player2) {
+		/*if (field[x][y]==player2) {
 			System.out.println("choose free place");
 		}
-    	else if (isCellValid(y, x)){
+    	else*/ if (isCellValid(y, x)){
     	field[y][x] = player1;}
-    	else System.out.println("choose the place which exist");
+    	else System.out.println("choose the place which exist or not occupied");
     	DrawField();
     	System.out.println("____________");
     }
